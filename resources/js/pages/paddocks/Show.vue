@@ -7,6 +7,7 @@ import OccupancyBar from '@/components/farm/OccupancyBar.vue';
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { show as showAnimal } from '@/routes/animals';
 import { edit, index, show } from '@/routes/paddocks';
 import type { AnimalSummary, Paddock } from '@/types';
 
@@ -123,7 +124,12 @@ setLayoutProps({
                                     class="border-b last:border-0"
                                 >
                                     <td class="py-2 pr-4 font-mono">
-                                        {{ animal.tag_number }}
+                                        <Link
+                                            :href="showAnimal(animal)"
+                                            class="font-medium underline-offset-4 hover:underline"
+                                        >
+                                            {{ animal.tag_number }}
+                                        </Link>
                                     </td>
                                     <td class="py-2 pr-4">
                                         {{ animal.name ?? '—' }}

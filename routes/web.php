@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\PaddockController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,7 @@ Route::redirect('/', '/dashboard')->name('home');
 
 Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 
+Route::resource('animals', AnimalController::class)->except(['destroy']);
 Route::resource('paddocks', PaddockController::class)->except(['destroy']);
 
 require __DIR__.'/settings.php';

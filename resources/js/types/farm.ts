@@ -1,6 +1,7 @@
 export type SelectOption = {
     value: string;
     label: string;
+    disabled?: boolean;
 };
 
 export type OccupancyState = 'ok' | 'warning' | 'full';
@@ -34,4 +35,54 @@ export type AnimalSummary = {
     status: AnimalStatus;
     status_label: string;
     current_paddock?: { id: number; name: string } | null;
+};
+
+export type Animal = AnimalSummary & {
+    notes: string | null;
+    is_active: boolean;
+    created_at: string | null;
+};
+
+export type PaddockRef = { id: number; name: string };
+
+export type AnimalMovement = {
+    id: number;
+    moved_at: string;
+    moved_at_label: string;
+    from_paddock: PaddockRef | null;
+    to_paddock: PaddockRef | null;
+    notes: string | null;
+    animal?: { id: number; tag_number: string; display_name: string };
+};
+
+export type AnimalFormOptions = {
+    species: SelectOption[];
+    sexes: SelectOption[];
+    statuses: SelectOption[];
+    paddocks: Paddock[];
+};
+
+export type PaginationLink = {
+    url: string | null;
+    label: string;
+    active: boolean;
+};
+
+export type Paginated<T> = {
+    data: T[];
+    links: {
+        first: string | null;
+        last: string | null;
+        prev: string | null;
+        next: string | null;
+    };
+    meta: {
+        current_page: number;
+        from: number | null;
+        last_page: number;
+        per_page: number;
+        to: number | null;
+        total: number;
+        links: PaginationLink[];
+    };
 };

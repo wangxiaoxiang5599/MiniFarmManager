@@ -15,6 +15,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as animalsIndex } from '@/routes/animals';
 import { index as paddocksIndex } from '@/routes/paddocks';
 import type { NavItem } from '@/types';
 
@@ -26,7 +27,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Animals',
-        href: '/animals',
+        href: animalsIndex(),
         icon: PawPrint,
     },
     {
