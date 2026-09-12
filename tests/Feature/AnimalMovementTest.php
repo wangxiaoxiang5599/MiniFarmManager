@@ -118,6 +118,54 @@ class AnimalMovementTest extends TestCase
         $this->assertSame($c->id, $latest->from_paddock_id);
     }
 
+    public function test_an_animal_can_be_moved_through_the_endpoint(): void
+    {
+        $from = Paddock::factory()->create();
+        $to = Paddock::factory()->withCapacity(5)->create(['name' => 'Target']);
+        $animal = Animal::factory()->inPaddock($from)->create();
+
+        $this->post(route('animals.movements.store', $animal), [
+            'to_paddock_id' => $to->id,
+            'moved_at' => '2026-09-01T09:30',
+            'notes' => 'Weaning',
+        ])
+            ->assertRedirect(route('animals.show', $animal))
+            ->assertSessionHasNoErrors();
+
+        $movement = $animal->movements()->sole();
+
+        $this->assertSame($to->id, $animal->fresh()->current_paddock_id);
+        $this->assertSame($from->id, $movement->from_paddock_id);
+        $this->assertSame('2026-09-01 09:30:00', $movement->moved_at->toDateTimeString());
+        $this->assertSame('Weaning', $movement->notes);
+    }
+
+    public function test_the_endpoint_reports_a_full_paddock_on_the_paddock_field(): void
+    {
+        $full = Paddock::factory()->withCapacity(1)->create(['name' => 'Full']);
+        Animal::factory()->inPaddock($full)->create();
+        $animal = Animal::factory()->create();
+
+        $this->from(route('animals.show', $animal))
+            ->post(route('animals.movements.store', $animal), ['to_paddock_id' => $full->id])
+            ->assertRedirect(route('animals.show', $animal))
+            ->assertSessionHasErrors(['to_paddock_id' => 'Full is full (1 of 1). Move an animal out first.']);
+
+        $this->assertNull($animal->fresh()->current_paddock_id);
+    }
+
+    public function test_the_endpoint_validates_its_input(): void
+    {
+        $animal = Animal::factory()->create();
+
+        $this->post(route('animals.movements.store', $animal), [
+            'to_paddock_id' => 999,
+            'moved_at' => now()->addDay()->toIso8601String(),
+        ])->assertSessionHasErrors(['to_paddock_id', 'moved_at']);
+
+        $this->assertSame(0, $animal->movements()->count());
+    }
+
     public function test_changing_status_away_from_active_frees_the_paddock_place(): void
     {
         $paddock = Paddock::factory()->withCapacity(1)->create();

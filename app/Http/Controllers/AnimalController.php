@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\ChangeAnimalStatus;
 use App\Actions\MoveAnimal;
 use App\Enums\AnimalStatus;
+use App\Enums\HealthRecordType;
 use App\Enums\Sex;
 use App\Enums\Species;
 use App\Http\Requests\StoreAnimalRequest;
@@ -12,6 +13,7 @@ use App\Http\Requests\UpdateAnimalRequest;
 use App\Http\Resources\AnimalMovementResource;
 use App\Http\Resources\AnimalResource;
 use App\Http\Resources\AnimalSummaryResource;
+use App\Http\Resources\HealthRecordResource;
 use App\Http\Resources\PaddockResource;
 use App\Models\Animal;
 use App\Models\Paddock;
@@ -104,12 +106,19 @@ class AnimalController extends Controller
             ->latest('id')
             ->get();
 
+        $healthRecords = $animal->healthRecords()
+            ->latest('recorded_on')
+            ->latest('id')
+            ->get();
+
         $paddocks = Paddock::query()->withOccupancy()->orderBy('name')->get();
 
         return Inertia::render('animals/Show', [
             'animal' => AnimalResource::make($animal)->resolve(),
             'movements' => AnimalMovementResource::collection($movements)->resolve(),
+            'healthRecords' => HealthRecordResource::collection($healthRecords)->resolve(),
             'paddocks' => PaddockResource::collection($paddocks)->resolve(),
+            'healthRecordTypes' => HealthRecordType::options(),
         ]);
     }
 

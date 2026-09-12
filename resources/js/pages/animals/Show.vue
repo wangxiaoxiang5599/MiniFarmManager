@@ -3,17 +3,28 @@ import { Head, Link, setLayoutProps } from '@inertiajs/vue3';
 import { ArrowRight, Pencil } from '@lucide/vue';
 import AnimalStatusBadge from '@/components/farm/AnimalStatusBadge.vue';
 import EmptyState from '@/components/farm/EmptyState.vue';
+import HealthRecordForm from '@/components/farm/HealthRecordForm.vue';
+import MoveAnimalDialog from '@/components/farm/MoveAnimalDialog.vue';
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { edit, index, show } from '@/routes/animals';
 import { show as showPaddock } from '@/routes/paddocks';
-import type { Animal, AnimalMovement, Paddock } from '@/types';
+import type {
+    Animal,
+    AnimalMovement,
+    HealthRecord,
+    Paddock,
+    SelectOption,
+} from '@/types';
 
 const props = defineProps<{
     animal: Animal;
     movements: AnimalMovement[];
+    healthRecords: HealthRecord[];
     paddocks: Paddock[];
+    healthRecordTypes: SelectOption[];
 }>();
 
 setLayoutProps({
@@ -79,6 +90,12 @@ const details = [
                             {{ props.animal.status_label }} animals do not
                             occupy a paddock.
                         </p>
+                        <div v-else>
+                            <MoveAnimalDialog
+                                :animal="props.animal"
+                                :paddocks="props.paddocks"
+                            />
+                        </div>
                     </CardContent>
                 </Card>
 
@@ -145,6 +162,49 @@ const details = [
                                     class="text-muted-foreground text-xs"
                                 >
                                     {{ movement.notes }}
+                                </p>
+                            </li>
+                        </ol>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Health history</CardTitle>
+                    </CardHeader>
+                    <CardContent class="flex flex-col gap-6">
+                        <HealthRecordForm
+                            :animal="props.animal"
+                            :types="props.healthRecordTypes"
+                        />
+
+                        <EmptyState
+                            v-if="props.healthRecords.length === 0"
+                            title="No health records yet"
+                            description="Vaccinations, treatments, injuries and check-ups will be listed here."
+                        />
+                        <ol v-else class="divide-y border-t">
+                            <li
+                                v-for="record in props.healthRecords"
+                                :key="record.id"
+                                class="flex flex-col gap-1 py-3 text-sm last:pb-0"
+                            >
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <Badge variant="secondary">
+                                        {{ record.type_label }}
+                                    </Badge>
+                                    <span class="font-medium">
+                                        {{ record.description }}
+                                    </span>
+                                    <span class="text-muted-foreground ml-auto text-xs tabular-nums">
+                                        {{ record.recorded_on_label }}
+                                    </span>
+                                </div>
+                                <p
+                                    v-if="record.notes"
+                                    class="text-muted-foreground text-xs whitespace-pre-line"
+                                >
+                                    {{ record.notes }}
                                 </p>
                             </li>
                         </ol>

@@ -86,3 +86,20 @@ export type Paginated<T> = {
         links: PaginationLink[];
     };
 };
+
+export type HealthRecordType =
+    | 'vaccination'
+    | 'treatment'
+    | 'injury'
+    | 'checkup'
+    | 'other';
+
+export type HealthRecord = {
+    id: number;
+    recorded_on: string;
+    recorded_on_label: string;
+    type: HealthRecordType;
+    type_label: string;
+    description: string;
+    notes: string | null;
+};
