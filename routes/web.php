@@ -1,11 +1,24 @@
 <?php
 
+use App\Http\Controllers\AnimalController;
+use App\Http\Controllers\AnimalMovementController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HealthRecordController;
+use App\Http\Controllers\PaddockController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'Welcome')->name('home');
+/*
+ * The farm itself is intentionally public: the exercise brief states that
+ * authentication is not required. Fortify's auth and settings routes remain
+ * available but are not needed to use the application.
+ */
+Route::redirect('/', '/dashboard')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-});
+Route::get('dashboard', DashboardController::class)->name('dashboard');
+
+Route::resource('animals', AnimalController::class)->except(['destroy']);
+Route::post('animals/{animal}/movements', [AnimalMovementController::class, 'store'])->name('animals.movements.store');
+Route::post('animals/{animal}/health-records', [HealthRecordController::class, 'store'])->name('animals.health-records.store');
+Route::resource('paddocks', PaddockController::class)->except(['destroy']);
 
 require __DIR__.'/settings.php';
