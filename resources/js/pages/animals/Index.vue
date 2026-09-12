@@ -74,10 +74,7 @@ function clearFilters(): void {
 }
 
 watchDebounced(() => filters.search, applyFilters, { debounce: 300 });
-watch(
-    () => [filters.species, filters.status, filters.paddock],
-    applyFilters,
-);
+watch(() => [filters.species, filters.status, filters.paddock], applyFilters);
 </script>
 
 <template>
@@ -97,7 +94,9 @@ watch(
             </Button>
         </div>
 
-        <div class="grid gap-3 md:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_auto]">
+        <div
+            class="grid gap-3 md:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_auto]"
+        >
             <div class="relative">
                 <Search
                     class="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
@@ -158,7 +157,9 @@ watch(
         <div v-else class="overflow-x-auto rounded-xl border">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="text-muted-foreground bg-muted/40 border-b text-left">
+                    <tr
+                        class="text-muted-foreground bg-muted/40 border-b text-left"
+                    >
                         <th class="px-4 py-2.5 font-medium">Tag</th>
                         <th class="px-4 py-2.5 font-medium">Name</th>
                         <th class="px-4 py-2.5 font-medium">Species</th>

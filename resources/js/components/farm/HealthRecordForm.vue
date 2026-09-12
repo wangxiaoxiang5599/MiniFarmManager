@@ -73,7 +73,9 @@ function submit(): void {
         <div class="grid gap-2 sm:col-span-2">
             <Label for="health_notes">
                 Notes
-                <span class="text-muted-foreground font-normal">(optional)</span>
+                <span class="text-muted-foreground font-normal"
+                    >(optional)</span
+                >
             </Label>
             <Textarea
                 id="health_notes"

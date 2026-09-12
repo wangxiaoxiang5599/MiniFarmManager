@@ -1,6 +1,6 @@
 # Mini Farm Manager — Design Document
 
-This document records the domain model, business rules, application structure and testing strategy for the Mini Farm Manager exercise. It was written *before* implementation so that decisions are made once, deliberately, and can be referenced from the README.
+This document records the domain model, business rules, application structure and testing strategy for the Mini Farm Manager exercise. It was written _before_ implementation so that decisions are made once, deliberately, and can be referenced from the README.
 
 Requirements: see [`requirements.md`](requirements.md).
 
@@ -8,14 +8,14 @@ Requirements: see [`requirements.md`](requirements.md).
 
 ## 1. Overview and stack
 
-| Layer | Choice | Why |
-|---|---|---|
-| Backend | Laravel 13 / PHP 8.4 | Required by the brief |
-| Frontend | Inertia 3 + Vue 3.5 + TypeScript | Server-driven pages without a separate JSON API: less glue code, validation errors flow straight into `useForm` |
-| UI | Tailwind 4 + shadcn-vue components (`resources/js/components/ui`) | Already shipped with the starter kit; consistent look with minimal effort |
-| Routing glue | Laravel Wayfinder | Typed route/action helpers in TypeScript, no hard-coded URLs |
-| Database | SQLite | Zero setup for reviewers; schema is plain enough to run on MySQL/Postgres unchanged |
-| Tests | PHPUnit 12 (feature tests) | Starter kit default |
+| Layer        | Choice                                                            | Why                                                                                                             |
+| ------------ | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Backend      | Laravel 13 / PHP 8.4                                              | Required by the brief                                                                                           |
+| Frontend     | Inertia 3 + Vue 3.5 + TypeScript                                  | Server-driven pages without a separate JSON API: less glue code, validation errors flow straight into `useForm` |
+| UI           | Tailwind 4 + shadcn-vue components (`resources/js/components/ui`) | Already shipped with the starter kit; consistent look with minimal effort                                       |
+| Routing glue | Laravel Wayfinder                                                 | Typed route/action helpers in TypeScript, no hard-coded URLs                                                    |
+| Database     | SQLite                                                            | Zero setup for reviewers; schema is plain enough to run on MySQL/Postgres unchanged                             |
+| Tests        | PHPUnit 12 (feature tests)                                        | Starter kit default                                                                                             |
 
 **Authentication**: the brief says authentication is not required. The starter kit ships with Fortify (login, registration, 2FA, passkeys). We keep it installed — removing it costs time and buys nothing — but all farm routes are registered **outside** the `auth` middleware group so a reviewer can use the app without logging in.
 
@@ -31,41 +31,41 @@ animals  1 ──< health_records
 
 ### `animals`
 
-| Column | Type | Constraints / notes |
-|---|---|---|
-| `id` | bigint PK | |
-| `tag_number` | string | required, **unique** |
-| `name` | string | nullable ("if applicable") |
-| `species` | string (enum `Species`) | `cattle`, `sheep`, `goat`, `pig`, `horse`, `chicken`, `other` |
-| `sex` | string (enum `Sex`) | `male`, `female` |
-| `date_of_birth` | date | required, must not be in the future |
-| `breed` | string | nullable |
-| `status` | string (enum `AnimalStatus`) | `active` (default), `sold`, `deceased` |
-| `notes` | text | nullable |
-| `current_paddock_id` | FK → `paddocks` | nullable, `nullOnDelete` |
-| timestamps | | |
+| Column               | Type                         | Constraints / notes                                           |
+| -------------------- | ---------------------------- | ------------------------------------------------------------- |
+| `id`                 | bigint PK                    |                                                               |
+| `tag_number`         | string                       | required, **unique**                                          |
+| `name`               | string                       | nullable ("if applicable")                                    |
+| `species`            | string (enum `Species`)      | `cattle`, `sheep`, `goat`, `pig`, `horse`, `chicken`, `other` |
+| `sex`                | string (enum `Sex`)          | `male`, `female`                                              |
+| `date_of_birth`      | date                         | required, must not be in the future                           |
+| `breed`              | string                       | nullable                                                      |
+| `status`             | string (enum `AnimalStatus`) | `active` (default), `sold`, `deceased`                        |
+| `notes`              | text                         | nullable                                                      |
+| `current_paddock_id` | FK → `paddocks`              | nullable, `nullOnDelete`                                      |
+| timestamps           |                              |                                                               |
 
 ### `paddocks`
 
-| Column | Type | Constraints / notes |
-|---|---|---|
-| `id` | bigint PK | |
-| `name` | string | required, **unique** |
-| `capacity` | unsigned int | required, `>= 1` |
-| `notes` | text | nullable |
-| timestamps | | |
+| Column     | Type         | Constraints / notes  |
+| ---------- | ------------ | -------------------- |
+| `id`       | bigint PK    |                      |
+| `name`     | string       | required, **unique** |
+| `capacity` | unsigned int | required, `>= 1`     |
+| `notes`    | text         | nullable             |
+| timestamps |              |                      |
 
 ### `animal_movements`
 
-| Column | Type | Constraints / notes |
-|---|---|---|
-| `id` | bigint PK | |
-| `animal_id` | FK → `animals` | `cascadeOnDelete` |
+| Column            | Type            | Constraints / notes      |
+| ----------------- | --------------- | ------------------------ |
+| `id`              | bigint PK       |                          |
+| `animal_id`       | FK → `animals`  | `cascadeOnDelete`        |
 | `from_paddock_id` | FK → `paddocks` | nullable, `nullOnDelete` |
-| `to_paddock_id` | FK → `paddocks` | nullable, `nullOnDelete` |
-| `moved_at` | datetime | required |
-| `notes` | text | nullable |
-| timestamps | | |
+| `to_paddock_id`   | FK → `paddocks` | nullable, `nullOnDelete` |
+| `moved_at`        | datetime        | required                 |
+| `notes`           | text            | nullable                 |
+| timestamps        |                 |                          |
 
 Index on `(animal_id, moved_at)`.
 
@@ -77,15 +77,15 @@ Semantics of the nullable ends:
 
 ### `health_records`
 
-| Column | Type | Constraints / notes |
-|---|---|---|
-| `id` | bigint PK | |
-| `animal_id` | FK → `animals` | `cascadeOnDelete` |
-| `recorded_on` | date | required, not in the future |
-| `type` | string (enum `HealthRecordType`) | `vaccination`, `treatment`, `injury`, `checkup`, `other` |
-| `description` | string | required, short summary |
-| `notes` | text | nullable |
-| timestamps | | |
+| Column        | Type                             | Constraints / notes                                      |
+| ------------- | -------------------------------- | -------------------------------------------------------- |
+| `id`          | bigint PK                        |                                                          |
+| `animal_id`   | FK → `animals`                   | `cascadeOnDelete`                                        |
+| `recorded_on` | date                             | required, not in the future                              |
+| `type`        | string (enum `HealthRecordType`) | `vaccination`, `treatment`, `injury`, `checkup`, `other` |
+| `description` | string                           | required, short summary                                  |
+| `notes`       | text                             | nullable                                                 |
+| timestamps    |                                  |                                                          |
 
 Index on `(animal_id, recorded_on)`.
 
@@ -102,7 +102,7 @@ The trade-off is a denormalised column that can drift from the movement history.
 - `current_paddock_id` is **only ever written inside the same database transaction** that inserts the corresponding `animal_movements` row (see `MoveAnimal` below). No other code path touches it.
 - A feature test asserts that after a sequence of moves, `current_paddock_id` equals the `to_paddock_id` of the animal's latest movement.
 
-The movement table remains the source of truth for *history*; the column is a cache of its most recent row.
+The movement table remains the source of truth for _history_; the column is a cache of its most recent row.
 
 ---
 
@@ -110,12 +110,12 @@ The movement table remains the source of truth for *history*; the column is a ca
 
 1. **Occupancy.** `occupancy(paddock) = count(animals where current_paddock_id = paddock.id AND status = active)`. Non-active animals never occupy a paddock (rule 3 guarantees they have no `current_paddock_id` anyway).
 
-2. **Moving an animal** into paddock *T* is allowed only when:
-   - the animal's status is `active`;
-   - *T* differs from the animal's current paddock;
-   - `occupancy(T) < T.capacity`.
+2. **Moving an animal** into paddock _T_ is allowed only when:
+    - the animal's status is `active`;
+    - _T_ differs from the animal's current paddock;
+    - `occupancy(T) < T.capacity`.
 
-   The move runs inside `DB::transaction()` and takes `lockForUpdate()` on the target paddock row before counting, so two concurrent moves cannot both pass the check and overfill the paddock.
+    The move runs inside `DB::transaction()` and takes `lockForUpdate()` on the target paddock row before counting, so two concurrent moves cannot both pass the check and overfill the paddock.
 
 3. **Status change away from `active`** (`sold` or `deceased`) removes the animal from its paddock: a movement `(from = current, to = null)` is recorded and `current_paddock_id` is set to null, in one transaction. Changing status back to `active` leaves the animal unplaced; the user assigns a paddock through the normal move action (the edit form shows a hint explaining this).
 
@@ -123,15 +123,15 @@ The movement table remains the source of truth for *history*; the column is a ca
 
 5. **Editing a paddock's capacity** below its current occupancy is rejected with a validation error. This keeps "a paddock is never over capacity" as a hard invariant rather than a soft warning.
 
-6. **Capacity warning** *(the additional feature)*. Each paddock has a derived `occupancy_state`:
+6. **Capacity warning** _(the additional feature)_. Each paddock has a derived `occupancy_state`:
 
-   | Condition | State | UI |
-   |---|---|---|
-   | `occupancy / capacity < threshold` | `ok` | neutral |
-   | `threshold <= ratio < 1` | `warning` | amber highlight |
-   | `ratio >= 1` | `full` | red highlight, move target disabled |
+    | Condition                          | State     | UI                                  |
+    | ---------------------------------- | --------- | ----------------------------------- |
+    | `occupancy / capacity < threshold` | `ok`      | neutral                             |
+    | `threshold <= ratio < 1`           | `warning` | amber highlight                     |
+    | `ratio >= 1`                       | `full`    | red highlight, move target disabled |
 
-   `threshold` lives in `config/farm.php` (`capacity_warning_threshold`, default `0.8`). The state is computed server-side in one place (`Paddock::occupancyState()`, using `withCount` for lists) so every page agrees.
+    `threshold` lives in `config/farm.php` (`capacity_warning_threshold`, default `0.8`). The state is computed server-side in one place (`Paddock::occupancyState()`, using `withCount` for lists) so every page agrees.
 
 7. **Deletion** is out of scope: the brief asks only for add / edit / view. No destroy routes are exposed. This also sidesteps "what happens to history when a paddock is deleted" — the `nullOnDelete` FKs are there only as a safety net.
 
@@ -155,13 +155,13 @@ Validation lives here; the Actions enforce the invariants that depend on databas
 
 ### Controllers (`app/Http/Controllers/`)
 
-| Controller | Methods |
-|---|---|
-| `DashboardController` | `__invoke` |
-| `AnimalController` | `index`, `create`, `store`, `show`, `edit`, `update` |
-| `PaddockController` | `index`, `create`, `store`, `show`, `edit`, `update` |
-| `AnimalMovementController` | `store` |
-| `HealthRecordController` | `store` |
+| Controller                 | Methods                                              |
+| -------------------------- | ---------------------------------------------------- |
+| `DashboardController`      | `__invoke`                                           |
+| `AnimalController`         | `index`, `create`, `store`, `show`, `edit`, `update` |
+| `PaddockController`        | `index`, `create`, `store`, `show`, `edit`, `update` |
+| `AnimalMovementController` | `store`                                              |
+| `HealthRecordController`   | `store`                                              |
 
 Controllers stay thin: validate via Form Request, call an Action or a simple Eloquent write, redirect with a flash message.
 
@@ -204,15 +204,15 @@ Fortify and settings routes remain as generated by the starter kit. The sidebar'
 
 Pages under `resources/js/pages/`:
 
-| Page | Content |
-|---|---|
-| `Dashboard.vue` | Stat cards (active animals, paddocks, paddocks needing attention); animals by species; paddock occupancy list with progress bars (amber ≥ 80 %, red when full); recent movements; capacity-warning panel |
-| `animals/Index.vue` | Filterable table: tag, name, species, sex, age, status badge, current paddock |
-| `animals/Create.vue`, `animals/Edit.vue` | Shared `AnimalForm`; create offers optional initial paddock |
-| `animals/Show.vue` | Details, current paddock, "Move" dialog, movement history, health history + "Add record" form |
-| `paddocks/Index.vue` | Cards/table with occupancy bar and state badge |
-| `paddocks/Create.vue`, `paddocks/Edit.vue` | Shared `PaddockForm` |
-| `paddocks/Show.vue` | Capacity summary and the list of animals currently inside |
+| Page                                       | Content                                                                                                                                                                                                  |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Dashboard.vue`                            | Stat cards (active animals, paddocks, paddocks needing attention); animals by species; paddock occupancy list with progress bars (amber ≥ 80 %, red when full); recent movements; capacity-warning panel |
+| `animals/Index.vue`                        | Filterable table: tag, name, species, sex, age, status badge, current paddock                                                                                                                            |
+| `animals/Create.vue`, `animals/Edit.vue`   | Shared `AnimalForm`; create offers optional initial paddock                                                                                                                                              |
+| `animals/Show.vue`                         | Details, current paddock, "Move" dialog, movement history, health history + "Add record" form                                                                                                            |
+| `paddocks/Index.vue`                       | Cards/table with occupancy bar and state badge                                                                                                                                                           |
+| `paddocks/Create.vue`, `paddocks/Edit.vue` | Shared `PaddockForm`                                                                                                                                                                                     |
+| `paddocks/Show.vue`                        | Capacity summary and the list of animals currently inside                                                                                                                                                |
 
 Shared components in `resources/js/components/farm/`: `AnimalForm`, `PaddockForm`, `MoveAnimalDialog`, `HealthRecordForm`, `OccupancyBar`, `AnimalStatusBadge`, `EmptyState`.
 
@@ -230,14 +230,14 @@ Conventions:
 
 Feature tests (PHPUnit, `RefreshDatabase`, factories), covering behaviour the farmer would notice if it broke:
 
-| Test class | Cases |
-|---|---|
-| `AnimalTest` | create with valid data; duplicate tag rejected; DOB in the future rejected; create with initial paddock records a `null → paddock` movement; update basic fields; status → `sold` removes from paddock and writes a `paddock → null` movement |
-| `PaddockTest` | create / update validation; capacity below current occupancy rejected; show lists only active animals currently inside |
-| `AnimalMovementTest` | successful move updates `current_paddock_id` and appends history; rejected when target is full; rejected when target equals current; rejected when animal is not active; `current_paddock_id` matches latest movement after several moves |
-| `HealthRecordTest` | store with valid data; validation failures; animal page lists records newest first |
-| `DashboardTest` | animal counts and species breakdown; warnings panel includes a paddock at ≥ 80 % and excludes one below |
-| `PaddockOccupancyTest` | `occupancyState()` boundaries: 79 % → ok, 80 % → warning, 100 % → full; sold animals do not count |
+| Test class             | Cases                                                                                                                                                                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AnimalTest`           | create with valid data; duplicate tag rejected; DOB in the future rejected; create with initial paddock records a `null → paddock` movement; update basic fields; status → `sold` removes from paddock and writes a `paddock → null` movement |
+| `PaddockTest`          | create / update validation; capacity below current occupancy rejected; show lists only active animals currently inside                                                                                                                        |
+| `AnimalMovementTest`   | successful move updates `current_paddock_id` and appends history; rejected when target is full; rejected when target equals current; rejected when animal is not active; `current_paddock_id` matches latest movement after several moves     |
+| `HealthRecordTest`     | store with valid data; validation failures; animal page lists records newest first                                                                                                                                                            |
+| `DashboardTest`        | animal counts and species breakdown; warnings panel includes a paddock at ≥ 80 % and excludes one below                                                                                                                                       |
+| `PaddockOccupancyTest` | `occupancyState()` boundaries: 79 % → ok, 80 % → warning, 100 % → full; sold animals do not count                                                                                                                                             |
 
 Not tested: Fortify auth (already covered by starter kit tests), pure layout.
 
@@ -248,7 +248,7 @@ Not tested: Fortify auth (already covered by starter kit tests), pure layout.
 Left out to respect the 3–4 hour budget:
 
 - Deleting animals, paddocks or records
-- Recording *who* performed a movement (no auth in scope)
+- Recording _who_ performed a movement (no auth in scope)
 - Weight / medication history, photos, documents
 - Bulk moves (move a whole mob between paddocks)
 - Pagination beyond a simple paginator on the animals list

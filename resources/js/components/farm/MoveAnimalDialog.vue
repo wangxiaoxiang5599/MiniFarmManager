@@ -135,7 +135,9 @@ function submit(): void {
                 <div class="grid gap-2">
                     <Label for="move_notes">
                         Notes
-                        <span class="text-muted-foreground font-normal">(optional)</span>
+                        <span class="text-muted-foreground font-normal"
+                            >(optional)</span
+                        >
                     </Label>
                     <Textarea
                         id="move_notes"
@@ -147,7 +149,11 @@ function submit(): void {
                 </div>
 
                 <DialogFooter class="gap-2">
-                    <Button type="button" variant="secondary" @click="open = false">
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        @click="open = false"
+                    >
                         Cancel
                     </Button>
                     <Button

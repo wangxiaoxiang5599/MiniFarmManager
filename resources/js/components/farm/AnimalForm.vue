@@ -98,7 +98,12 @@ function submit(): void {
             </div>
 
             <div class="grid gap-2">
-                <Label for="name">Name <span class="text-muted-foreground font-normal">(optional)</span></Label>
+                <Label for="name"
+                    >Name
+                    <span class="text-muted-foreground font-normal"
+                        >(optional)</span
+                    ></Label
+                >
                 <Input id="name" v-model="form.name" placeholder="e.g. Daisy" />
                 <InputError :message="form.errors.name" />
             </div>
@@ -138,13 +143,27 @@ function submit(): void {
             </div>
 
             <div class="grid gap-2">
-                <Label for="breed">Breed <span class="text-muted-foreground font-normal">(optional)</span></Label>
-                <Input id="breed" v-model="form.breed" placeholder="e.g. Angus" />
+                <Label for="breed"
+                    >Breed
+                    <span class="text-muted-foreground font-normal"
+                        >(optional)</span
+                    ></Label
+                >
+                <Input
+                    id="breed"
+                    v-model="form.breed"
+                    placeholder="e.g. Angus"
+                />
                 <InputError :message="form.errors.breed" />
             </div>
 
             <div v-if="!isEditing" class="grid gap-2 sm:col-span-2">
-                <Label for="paddock_id">Place in paddock <span class="text-muted-foreground font-normal">(optional)</span></Label>
+                <Label for="paddock_id"
+                    >Place in paddock
+                    <span class="text-muted-foreground font-normal"
+                        >(optional)</span
+                    ></Label
+                >
                 <FormSelect
                     id="paddock_id"
                     v-model="form.paddock_id"
@@ -180,7 +199,12 @@ function submit(): void {
             </div>
 
             <div class="grid gap-2 sm:col-span-2">
-                <Label for="notes">Notes <span class="text-muted-foreground font-normal">(optional)</span></Label>
+                <Label for="notes"
+                    >Notes
+                    <span class="text-muted-foreground font-normal"
+                        >(optional)</span
+                    ></Label
+                >
                 <Textarea
                     id="notes"
                     v-model="form.notes"

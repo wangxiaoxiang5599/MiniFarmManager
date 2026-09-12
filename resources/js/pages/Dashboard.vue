@@ -9,8 +9,16 @@ import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { dashboard } from '@/routes';
-import { create as createAnimal, index as animalsIndex, show as showAnimal } from '@/routes/animals';
-import { create as createPaddock, index as paddocksIndex, show as showPaddock } from '@/routes/paddocks';
+import {
+    create as createAnimal,
+    index as animalsIndex,
+    show as showAnimal,
+} from '@/routes/animals';
+import {
+    create as createPaddock,
+    index as paddocksIndex,
+    show as showPaddock,
+} from '@/routes/paddocks';
 import type { AnimalMovement, Paddock } from '@/types';
 
 const props = defineProps<{
@@ -36,7 +44,9 @@ defineOptions({
 });
 
 const isEmptyFarm = computed(
-    () => props.stats.paddocks === 0 && props.animalsByStatus.every((row) => row.count === 0),
+    () =>
+        props.stats.paddocks === 0 &&
+        props.animalsByStatus.every((row) => row.count === 0),
 );
 
 const largestSpeciesCount = computed(() =>
@@ -45,7 +55,9 @@ const largestSpeciesCount = computed(() =>
 
 const farmUsagePercent = computed(() =>
     props.stats.total_capacity > 0
-        ? Math.round((props.stats.total_occupancy / props.stats.total_capacity) * 100)
+        ? Math.round(
+              (props.stats.total_occupancy / props.stats.total_capacity) * 100,
+          )
         : 0,
 );
 </script>
@@ -78,7 +90,9 @@ const farmUsagePercent = computed(() =>
             <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <Card class="gap-2 py-5">
                     <CardHeader class="px-5">
-                        <CardTitle class="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+                        <CardTitle
+                            class="text-muted-foreground flex items-center gap-2 text-sm font-medium"
+                        >
                             <PawPrint class="size-4" /> Active animals
                         </CardTitle>
                     </CardHeader>
@@ -97,7 +111,9 @@ const farmUsagePercent = computed(() =>
 
                 <Card class="gap-2 py-5">
                     <CardHeader class="px-5">
-                        <CardTitle class="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+                        <CardTitle
+                            class="text-muted-foreground flex items-center gap-2 text-sm font-medium"
+                        >
                             <Fence class="size-4" /> Paddocks
                         </CardTitle>
                     </CardHeader>
@@ -106,17 +122,25 @@ const farmUsagePercent = computed(() =>
                             {{ stats.paddocks }}
                         </p>
                         <p class="text-muted-foreground text-xs">
-                            {{ stats.total_occupancy }} of {{ stats.total_capacity }} places used ({{ farmUsagePercent }}%)
+                            {{ stats.total_occupancy }} of
+                            {{ stats.total_capacity }} places used ({{
+                                farmUsagePercent
+                            }}%)
                         </p>
                     </CardContent>
                 </Card>
 
                 <Card
                     class="gap-2 py-5"
-                    :class="{ 'border-amber-400/70': stats.paddocks_needing_attention > 0 }"
+                    :class="{
+                        'border-amber-400/70':
+                            stats.paddocks_needing_attention > 0,
+                    }"
                 >
                     <CardHeader class="px-5">
-                        <CardTitle class="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+                        <CardTitle
+                            class="text-muted-foreground flex items-center gap-2 text-sm font-medium"
+                        >
                             <AlertTriangle class="size-4" /> Needing attention
                         </CardTitle>
                     </CardHeader>
@@ -132,13 +156,18 @@ const farmUsagePercent = computed(() =>
 
                 <Card class="gap-2 py-5">
                     <CardHeader class="px-5">
-                        <CardTitle class="text-muted-foreground text-sm font-medium">
+                        <CardTitle
+                            class="text-muted-foreground text-sm font-medium"
+                        >
                             By status
                         </CardTitle>
                     </CardHeader>
                     <CardContent class="px-5">
                         <dl class="grid grid-cols-3 gap-2 text-center">
-                            <div v-for="row in animalsByStatus" :key="row.status">
+                            <div
+                                v-for="row in animalsByStatus"
+                                :key="row.status"
+                            >
                                 <dt class="text-muted-foreground text-xs">
                                     {{ row.label }}
                                 </dt>
@@ -156,7 +185,9 @@ const farmUsagePercent = computed(() =>
                     <CardHeader class="flex items-center justify-between">
                         <CardTitle>Paddock occupancy</CardTitle>
                         <Button as-child variant="ghost" size="sm">
-                            <Link :href="paddocksIndex()">All paddocks <ArrowRight /></Link>
+                            <Link :href="paddocksIndex()"
+                                >All paddocks <ArrowRight
+                            /></Link>
                         </Button>
                     </CardHeader>
                     <CardContent>
@@ -174,14 +205,18 @@ const farmUsagePercent = computed(() =>
                                 :key="paddock.id"
                                 class="flex flex-col gap-1.5"
                             >
-                                <div class="flex items-center justify-between gap-3 text-sm">
+                                <div
+                                    class="flex items-center justify-between gap-3 text-sm"
+                                >
                                     <Link
                                         :href="showPaddock(paddock)"
                                         class="font-medium underline-offset-4 hover:underline"
                                     >
                                         {{ paddock.name }}
                                     </Link>
-                                    <OccupancyBadge :state="paddock.occupancy_state" />
+                                    <OccupancyBadge
+                                        :state="paddock.occupancy_state"
+                                    />
                                 </div>
                                 <OccupancyBar
                                     :occupancy="paddock.occupancy"
@@ -223,19 +258,36 @@ const farmUsagePercent = computed(() =>
                                         >
                                             {{ paddock.name }}
                                         </Link>
-                                        <p class="text-muted-foreground text-xs">
-                                            <template v-if="paddock.occupancy_state === 'full'">
-                                                Full — {{ paddock.occupancy }} / {{ paddock.capacity }}
+                                        <p
+                                            class="text-muted-foreground text-xs"
+                                        >
+                                            <template
+                                                v-if="
+                                                    paddock.occupancy_state ===
+                                                    'full'
+                                                "
+                                            >
+                                                Full — {{ paddock.occupancy }} /
+                                                {{ paddock.capacity }}
                                             </template>
                                             <template v-else>
                                                 {{ paddock.remaining_capacity }}
-                                                place{{ paddock.remaining_capacity === 1 ? '' : 's' }}
+                                                place{{
+                                                    paddock.remaining_capacity ===
+                                                    1
+                                                        ? ''
+                                                        : 's'
+                                                }}
                                                 left of {{ paddock.capacity }}
                                             </template>
                                         </p>
                                     </div>
                                     <span class="font-semibold tabular-nums">
-                                        {{ Math.round(paddock.occupancy_ratio * 100) }}%
+                                        {{
+                                            Math.round(
+                                                paddock.occupancy_ratio * 100,
+                                            )
+                                        }}%
                                     </span>
                                 </li>
                             </ul>
@@ -260,18 +312,28 @@ const farmUsagePercent = computed(() =>
                                     class="grid grid-cols-[5rem_1fr_2rem] items-center gap-2"
                                 >
                                     <Link
-                                        :href="animalsIndex({ query: { species: row.species } })"
+                                        :href="
+                                            animalsIndex({
+                                                query: { species: row.species },
+                                            })
+                                        "
                                         class="truncate underline-offset-4 hover:underline"
                                     >
                                         {{ row.label }}
                                     </Link>
-                                    <div class="bg-muted h-2 overflow-hidden rounded-full">
+                                    <div
+                                        class="bg-muted h-2 overflow-hidden rounded-full"
+                                    >
                                         <div
                                             class="bg-primary h-full rounded-full"
-                                            :style="{ width: `${(row.count / largestSpeciesCount) * 100}%` }"
+                                            :style="{
+                                                width: `${(row.count / largestSpeciesCount) * 100}%`,
+                                            }"
                                         />
                                     </div>
-                                    <span class="text-right tabular-nums">{{ row.count }}</span>
+                                    <span class="text-right tabular-nums">{{
+                                        row.count
+                                    }}</span>
                                 </li>
                             </ul>
                         </CardContent>
@@ -283,7 +345,9 @@ const farmUsagePercent = computed(() =>
                 <CardHeader class="flex items-center justify-between">
                     <CardTitle>Recent movements</CardTitle>
                     <Button as-child variant="ghost" size="sm">
-                        <Link :href="animalsIndex()">All animals <ArrowRight /></Link>
+                        <Link :href="animalsIndex()"
+                            >All animals <ArrowRight
+                        /></Link>
                     </Button>
                 </CardHeader>
                 <CardContent>
@@ -296,9 +360,13 @@ const farmUsagePercent = computed(() =>
                     <div v-else class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
-                                <tr class="text-muted-foreground border-b text-left">
+                                <tr
+                                    class="text-muted-foreground border-b text-left"
+                                >
                                     <th class="py-2 pr-4 font-medium">When</th>
-                                    <th class="py-2 pr-4 font-medium">Animal</th>
+                                    <th class="py-2 pr-4 font-medium">
+                                        Animal
+                                    </th>
                                     <th class="py-2 pr-4 font-medium">From</th>
                                     <th class="py-2 pr-4 font-medium">To</th>
                                     <th class="py-2 font-medium">Notes</th>
@@ -310,7 +378,9 @@ const farmUsagePercent = computed(() =>
                                     :key="movement.id"
                                     class="border-b last:border-0"
                                 >
-                                    <td class="text-muted-foreground py-2 pr-4 whitespace-nowrap tabular-nums">
+                                    <td
+                                        class="text-muted-foreground py-2 pr-4 whitespace-nowrap tabular-nums"
+                                    >
                                         {{ movement.moved_at_label }}
                                     </td>
                                     <td class="py-2 pr-4">
@@ -322,13 +392,33 @@ const farmUsagePercent = computed(() =>
                                             {{ movement.animal.display_name }}
                                         </Link>
                                     </td>
-                                    <td class="py-2 pr-4" :class="{ 'text-muted-foreground italic': !movement.from_paddock }">
-                                        {{ movement.from_paddock?.name ?? 'Unplaced' }}
+                                    <td
+                                        class="py-2 pr-4"
+                                        :class="{
+                                            'text-muted-foreground italic':
+                                                !movement.from_paddock,
+                                        }"
+                                    >
+                                        {{
+                                            movement.from_paddock?.name ??
+                                            'Unplaced'
+                                        }}
                                     </td>
-                                    <td class="py-2 pr-4" :class="{ 'text-muted-foreground italic': !movement.to_paddock }">
-                                        {{ movement.to_paddock?.name ?? 'Unplaced' }}
+                                    <td
+                                        class="py-2 pr-4"
+                                        :class="{
+                                            'text-muted-foreground italic':
+                                                !movement.to_paddock,
+                                        }"
+                                    >
+                                        {{
+                                            movement.to_paddock?.name ??
+                                            'Unplaced'
+                                        }}
                                     </td>
-                                    <td class="text-muted-foreground max-w-xs truncate py-2">
+                                    <td
+                                        class="text-muted-foreground max-w-xs truncate py-2"
+                                    >
                                         {{ movement.notes ?? '' }}
                                     </td>
                                 </tr>

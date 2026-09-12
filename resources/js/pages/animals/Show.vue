@@ -80,7 +80,10 @@ const details = [
                         >
                             {{ props.animal.current_paddock.name }}
                         </Link>
-                        <p v-else class="text-muted-foreground text-2xl font-semibold">
+                        <p
+                            v-else
+                            class="text-muted-foreground text-2xl font-semibold"
+                        >
                             Unplaced
                         </p>
                         <p
@@ -104,7 +107,9 @@ const details = [
                         <CardTitle>Details</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+                        <dl
+                            class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm"
+                        >
                             <template v-for="item in details" :key="item.label">
                                 <dt class="text-muted-foreground">
                                     {{ item.label }}
@@ -142,18 +147,33 @@ const details = [
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span
                                         class="text-muted-foreground"
-                                        :class="{ italic: !movement.from_paddock }"
+                                        :class="{
+                                            italic: !movement.from_paddock,
+                                        }"
                                     >
-                                        {{ movement.from_paddock?.name ?? 'Unplaced' }}
+                                        {{
+                                            movement.from_paddock?.name ??
+                                            'Unplaced'
+                                        }}
                                     </span>
-                                    <ArrowRight class="text-muted-foreground size-4" />
+                                    <ArrowRight
+                                        class="text-muted-foreground size-4"
+                                    />
                                     <span
                                         class="font-medium"
-                                        :class="{ 'text-muted-foreground italic': !movement.to_paddock }"
+                                        :class="{
+                                            'text-muted-foreground italic':
+                                                !movement.to_paddock,
+                                        }"
                                     >
-                                        {{ movement.to_paddock?.name ?? 'Unplaced' }}
+                                        {{
+                                            movement.to_paddock?.name ??
+                                            'Unplaced'
+                                        }}
                                     </span>
-                                    <span class="text-muted-foreground ml-auto text-xs tabular-nums">
+                                    <span
+                                        class="text-muted-foreground ml-auto text-xs tabular-nums"
+                                    >
                                         {{ movement.moved_at_label }}
                                     </span>
                                 </div>
@@ -196,7 +216,9 @@ const details = [
                                     <span class="font-medium">
                                         {{ record.description }}
                                     </span>
-                                    <span class="text-muted-foreground ml-auto text-xs tabular-nums">
+                                    <span
+                                        class="text-muted-foreground ml-auto text-xs tabular-nums"
+                                    >
                                         {{ record.recorded_on_label }}
                                     </span>
                                 </div>

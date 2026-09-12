@@ -56,9 +56,10 @@ defineOptions({
                 class="focus-visible:ring-ring rounded-xl focus-visible:ring-2 focus-visible:outline-none"
             >
                 <Card
-                    class="h-full gap-4 py-5 transition-colors hover:bg-accent/40"
+                    class="hover:bg-accent/40 h-full gap-4 py-5 transition-colors"
                     :class="{
-                        'border-amber-400/70': paddock.occupancy_state === 'warning',
+                        'border-amber-400/70':
+                            paddock.occupancy_state === 'warning',
                         'border-red-400/70': paddock.occupancy_state === 'full',
                     }"
                 >
