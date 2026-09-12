@@ -2,6 +2,7 @@
 
 A small farm-management application built for the Laravel + Vue developer exercise. A farmer can register animals, keep them in paddocks, move them around without ever overfilling a paddock, and record each animal's health history. A dashboard shows the state of the farm at a glance, and paddocks that are nearly full are flagged before they become a problem.
 
+- **Live demo:** https://minifarm.wangxiaoxiang.com/ — no login needed; the demo farm is seeded
 - **Stack:** Laravel 13 · PHP 8.4 · Inertia 3 · Vue 3.5 · TypeScript · Tailwind 4 · SQLite · PHPUnit 12
 - **Design document:** [`docs/design.md`](docs/design.md) — written before implementation; the domain model, business rules and testing strategy live there
 - **Exercise brief:** [`docs/requirements.md`](docs/requirements.md)
