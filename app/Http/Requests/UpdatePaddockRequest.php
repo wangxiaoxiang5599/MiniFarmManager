@@ -7,6 +7,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
+use LogicException;
 
 class UpdatePaddockRequest extends FormRequest
 {
@@ -30,6 +31,8 @@ class UpdatePaddockRequest extends FormRequest
     /**
      * Capacity may never drop below the number of animals already inside,
      * otherwise the "never over capacity" invariant would silently break.
+     *
+     * @return array<int, callable(Validator): void>
      */
     public function after(): array
     {
@@ -53,6 +56,12 @@ class UpdatePaddockRequest extends FormRequest
 
     private function paddock(): Paddock
     {
-        return $this->route('paddock');
+        $paddock = $this->route('paddock');
+
+        if (! $paddock instanceof Paddock) {
+            throw new LogicException('UpdatePaddockRequest requires a bound Paddock route parameter.');
+        }
+
+        return $paddock;
     }
 }

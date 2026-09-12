@@ -17,7 +17,7 @@ class HealthRecordFactory extends Factory
      */
     public function definition(): array
     {
-        $type = fake()->randomElement(HealthRecordType::cases());
+        $type = HealthRecordType::from(fake()->randomElement(HealthRecordType::values()));
 
         return [
             'animal_id' => Animal::factory(),

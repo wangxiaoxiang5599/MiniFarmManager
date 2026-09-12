@@ -72,7 +72,7 @@ class AnimalController extends Controller
     public function store(StoreAnimalRequest $request, MoveAnimal $moveAnimal): RedirectResponse
     {
         $validated = $request->validated();
-        $paddock = isset($validated['paddock_id']) ? Paddock::findOrFail($validated['paddock_id']) : null;
+        $paddock = isset($validated['paddock_id']) ? Paddock::query()->findOrFail((int) $validated['paddock_id']) : null;
 
         try {
             $animal = DB::transaction(function () use ($validated, $paddock, $moveAnimal): Animal {

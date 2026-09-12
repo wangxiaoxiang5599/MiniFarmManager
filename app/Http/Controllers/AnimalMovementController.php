@@ -15,7 +15,7 @@ class AnimalMovementController extends Controller
     public function store(StoreAnimalMovementRequest $request, Animal $animal, MoveAnimal $moveAnimal): RedirectResponse
     {
         $validated = $request->validated();
-        $paddock = Paddock::findOrFail($validated['to_paddock_id']);
+        $paddock = Paddock::query()->findOrFail((int) $validated['to_paddock_id']);
 
         $moveAnimal->handle(
             $animal,

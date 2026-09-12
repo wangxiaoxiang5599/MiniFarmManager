@@ -63,6 +63,8 @@ class Paddock extends Model
     /**
      * Number of active animals in the paddock. Uses the eager-loaded
      * count when present, otherwise falls back to a query.
+     *
+     * @return Attribute<int, never>
      */
     protected function occupancy(): Attribute
     {
