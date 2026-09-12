@@ -24,7 +24,8 @@ defineOptions({
 });
 
 const page = usePage();
-const user = computed(() => page.props.auth.user);
+// This page sits behind the auth middleware, so a user is always present.
+const user = computed(() => page.props.auth.user!);
 </script>
 
 <template>

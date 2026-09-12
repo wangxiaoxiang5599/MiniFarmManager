@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'Welcome')->name('home');
+/*
+ * The farm itself is intentionally public: the exercise brief states that
+ * authentication is not required. Fortify's auth and settings routes remain
+ * available but are not needed to use the application.
+ */
+Route::redirect('/', '/dashboard')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-});
+Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 
 require __DIR__.'/settings.php';
