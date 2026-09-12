@@ -20,7 +20,7 @@ class AnimalFactory extends Factory
     public function definition(): array
     {
         return [
-            'tag_number' => fake()->unique()->bothify('??-####'),
+            'tag_number' => strtoupper(fake()->unique()->bothify('??-####')),
             'name' => fake()->optional(0.6)->firstName(),
             'species' => fake()->randomElement(Species::cases()),
             'sex' => fake()->randomElement(Sex::cases()),

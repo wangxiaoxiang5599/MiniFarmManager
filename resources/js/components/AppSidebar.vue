@@ -15,6 +15,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as paddocksIndex } from '@/routes/paddocks';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -30,7 +31,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Paddocks',
-        href: '/paddocks',
+        href: paddocksIndex(),
         icon: Fence,
     },
 ];
