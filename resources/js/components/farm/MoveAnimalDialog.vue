@@ -70,9 +70,7 @@ function submit(): void {
     form.transform((data) => ({
         ...data,
         moved_at:
-            data.moved_at === ''
-                ? null
-                : new Date(data.moved_at).toISOString(),
+            data.moved_at === '' ? null : new Date(data.moved_at).toISOString(),
         notes: data.notes === '' ? null : data.notes,
     })).submit(AnimalMovementController.store(props.animal), {
         preserveScroll: true,
