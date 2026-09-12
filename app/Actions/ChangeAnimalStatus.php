@@ -18,6 +18,8 @@ class ChangeAnimalStatus
     public function handle(Animal $animal, AnimalStatus $status): Animal
     {
         return DB::transaction(function () use ($animal, $status): Animal {
+            $animal->refresh();
+
             if ($animal->status === $status) {
                 return $animal;
             }

@@ -16,11 +16,9 @@ class PaddockFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement([
-                'North Paddock', 'South Paddock', 'East Paddock', 'West Paddock',
-                'River Flat', 'Top Hill', 'Home Paddock', 'Back Block',
-                'Creek Paddock', 'Long Paddock', 'Orchard Paddock', 'Ridge Paddock',
-            ]),
+            'name' => fake()->randomElement([
+                'North', 'South', 'East', 'West', 'River', 'Hill', 'Home', 'Creek', 'Ridge', 'Orchard',
+            ]).' Paddock '.fake()->unique()->numberBetween(1, 9999),
             'capacity' => fake()->numberBetween(5, 40),
             'notes' => null,
         ];

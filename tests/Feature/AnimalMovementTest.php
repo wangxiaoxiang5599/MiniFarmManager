@@ -183,6 +183,31 @@ class AnimalMovementTest extends TestCase
         $this->assertSame('Left paddock: marked as Deceased.', $movement->notes);
     }
 
+    public function test_the_caller_instance_is_kept_in_sync_after_a_move(): void
+    {
+        $paddock = Paddock::factory()->create();
+        $animal = Animal::factory()->create();
+
+        $this->moveAnimal()->handle($animal, $paddock);
+
+        $this->assertSame($paddock->id, $animal->current_paddock_id);
+        $this->assertFalse($animal->isDirty());
+    }
+
+    public function test_changing_status_on_a_stale_instance_still_frees_the_paddock(): void
+    {
+        $paddock = Paddock::factory()->withCapacity(1)->create();
+        $animal = Animal::factory()->create();
+        $stale = Animal::find($animal->id);
+
+        $this->moveAnimal()->handle($animal, $paddock);
+        $this->app->make(ChangeAnimalStatus::class)->handle($stale, AnimalStatus::Sold);
+
+        $this->assertNull($animal->fresh()->current_paddock_id);
+        $this->assertTrue($paddock->fresh()->hasRoom());
+        $this->assertSame(2, $animal->movements()->count());
+    }
+
     public function test_changing_status_of_an_unplaced_animal_records_no_movement(): void
     {
         $animal = Animal::factory()->create();

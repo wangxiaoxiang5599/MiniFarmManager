@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\AnimalMovementController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\PaddockController;
 use Illuminate\Support\Facades\Route;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::redirect('/', '/dashboard')->name('home');
 
-Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+Route::get('dashboard', DashboardController::class)->name('dashboard');
 
 Route::resource('animals', AnimalController::class)->except(['destroy']);
 Route::post('animals/{animal}/movements', [AnimalMovementController::class, 'store'])->name('animals.movements.store');

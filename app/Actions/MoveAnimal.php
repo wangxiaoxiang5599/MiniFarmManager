@@ -29,7 +29,10 @@ class MoveAnimal
         ?string $notes = null,
     ): AnimalMovement {
         return DB::transaction(function () use ($animal, $to, $movedAt, $notes): AnimalMovement {
-            $animal = Animal::query()->lockForUpdate()->findOrFail($animal->id);
+            // Work from the locked row, but keep the caller's instance in sync
+            // so it never carries a stale current_paddock_id afterwards.
+            $locked = Animal::query()->lockForUpdate()->findOrFail($animal->id);
+            $animal->setRawAttributes($locked->getAttributes(), true);
 
             if ($to !== null) {
                 $this->ensureAnimalCanBePlaced($animal, $to);
