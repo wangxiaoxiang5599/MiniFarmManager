@@ -54,7 +54,7 @@ class AnimalTest extends TestCase
         $paddock = Paddock::factory()->create();
         Animal::factory()->inPaddock($paddock)->species(Species::Sheep)->create(['tag_number' => 'SH-1', 'name' => 'Woolly']);
         Animal::factory()->species(Species::Cattle)->create(['tag_number' => 'CT-1']);
-        Animal::factory()->sold()->create(['tag_number' => 'SOLD-1']);
+        Animal::factory()->sold()->species(Species::Goat)->create(['tag_number' => 'SOLD-1']);
 
         $this->get(route('animals.index', ['search' => 'wool']))
             ->assertInertia(fn (Assert $page) => $page->has('animals.data', 1)->where('animals.data.0.tag_number', 'SH-1'));
