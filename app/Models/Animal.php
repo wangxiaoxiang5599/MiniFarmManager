@@ -88,6 +88,23 @@ class Animal extends Model
     }
 
     /**
+     * Age in whole years, months and days — the date of birth has no time
+     * component, so anything finer than a day would be noise.
+     */
+    public function ageLabel(): string
+    {
+        $diff = $this->date_of_birth->startOfDay()->diff(Carbon::today());
+
+        $parts = array_filter([
+            $diff->y > 0 ? $diff->y.'y' : null,
+            $diff->m > 0 ? $diff->m.'m' : null,
+            $diff->y === 0 && $diff->d > 0 ? $diff->d.'d' : null,
+        ]);
+
+        return $parts === [] ? '0d' : implode(' ', array_slice($parts, 0, 2));
+    }
+
+    /**
      * Tag number, with the name appended when the animal has one.
      */
     public function displayName(): string

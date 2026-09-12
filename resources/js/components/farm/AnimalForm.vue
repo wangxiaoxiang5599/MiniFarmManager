@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import FormSelect from '@/components/farm/FormSelect.vue';
 import InputError from '@/components/InputError.vue';
@@ -32,7 +32,7 @@ const form = useForm({
     paddock_id: '',
 });
 
-const today = new Date().toISOString().slice(0, 10);
+const today = usePage().props.farm.today;
 
 /**
  * Paddock choices for the initial placement. Full paddocks are listed but

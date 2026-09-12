@@ -118,6 +118,53 @@ class AnimalMovementTest extends TestCase
         $this->assertSame($c->id, $latest->from_paddock_id);
     }
 
+    public function test_a_movement_cannot_be_dated_before_the_latest_movement(): void
+    {
+        [$a, $b] = Paddock::factory()->count(2)->withCapacity(5)->create();
+        $animal = Animal::factory()->create();
+
+        $this->moveAnimal()->handle($animal, $a, now()->setTime(10, 0));
+
+        try {
+            $this->moveAnimal()->handle($animal, $b, now()->subDay());
+            $this->fail('Expected a ValidationException.');
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('moved_at', $exception->errors());
+        }
+
+        $this->assertSame($a->id, $animal->fresh()->current_paddock_id);
+        $this->assertSame(1, $animal->movements()->count());
+    }
+
+    public function test_a_movement_may_share_the_timestamp_of_the_latest_movement(): void
+    {
+        [$a, $b] = Paddock::factory()->count(2)->withCapacity(5)->create();
+        $animal = Animal::factory()->create();
+        $at = now()->setTime(10, 0);
+
+        $this->moveAnimal()->handle($animal, $a, $at);
+        $this->moveAnimal()->handle($animal, $b, $at);
+
+        $this->assertSame($b->id, $animal->fresh()->current_paddock_id);
+    }
+
+    public function test_the_endpoint_rejects_a_back_dated_movement_on_the_date_field(): void
+    {
+        [$a, $b] = Paddock::factory()->count(2)->withCapacity(5)->create();
+        $animal = Animal::factory()->create();
+        $this->moveAnimal()->handle($animal, $a, now());
+
+        $this->from(route('animals.show', $animal))
+            ->post(route('animals.movements.store', $animal), [
+                'to_paddock_id' => $b->id,
+                'moved_at' => now()->subDays(2)->format('Y-m-d\TH:i'),
+            ])
+            ->assertRedirect(route('animals.show', $animal))
+            ->assertSessionHasErrors(['moved_at']);
+
+        $this->assertSame($a->id, $animal->fresh()->current_paddock_id);
+    }
+
     public function test_an_animal_can_be_moved_through_the_endpoint(): void
     {
         $from = Paddock::factory()->create();

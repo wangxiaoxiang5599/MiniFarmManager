@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import HealthRecordController from '@/actions/App/Http/Controllers/HealthRecordController';
 import FormSelect from '@/components/farm/FormSelect.vue';
 import InputError from '@/components/InputError.vue';
@@ -14,7 +14,7 @@ const props = defineProps<{
     types: SelectOption[];
 }>();
 
-const today = new Date().toISOString().slice(0, 10);
+const today = usePage().props.farm.today;
 
 const form = useForm({
     recorded_on: today,

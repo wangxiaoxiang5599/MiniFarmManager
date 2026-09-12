@@ -19,6 +19,13 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            farm: {
+                /** The farm's timezone; all dates and times are interpreted in it. */
+                timezone: string;
+                /** Today's date (YYYY-MM-DD) in the farm's timezone. */
+                today: string;
+                capacity_warning_percent: number;
+            };
             [key: string]: unknown;
         };
     }

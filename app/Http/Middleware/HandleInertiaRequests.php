@@ -42,6 +42,11 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'farm' => [
+                'timezone' => config('app.timezone'),
+                'today' => now()->toDateString(),
+                'capacity_warning_percent' => (int) round(config('farm.capacity_warning_threshold') * 100),
+            ],
         ];
     }
 }

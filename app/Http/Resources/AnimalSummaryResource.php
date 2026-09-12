@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\Animal;
-use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,7 +29,7 @@ class AnimalSummaryResource extends JsonResource
             'sex_label' => $this->sex->label(),
             'breed' => $this->breed,
             'date_of_birth' => $this->date_of_birth->toDateString(),
-            'age' => $this->date_of_birth->diffForHumans(syntax: CarbonInterface::DIFF_ABSOLUTE, short: true, parts: 2),
+            'age' => $this->ageLabel(),
             'status' => $this->status->value,
             'status_label' => $this->status->label(),
             'current_paddock' => $this->whenLoaded('currentPaddock', fn () => $this->currentPaddock ? [
