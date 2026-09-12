@@ -69,7 +69,10 @@ watch(open, (isOpen) => {
 function submit(): void {
     form.transform((data) => ({
         ...data,
-        moved_at: data.moved_at === '' ? null : data.moved_at,
+        moved_at:
+            data.moved_at === ''
+                ? null
+                : new Date(data.moved_at).toISOString(),
         notes: data.notes === '' ? null : data.notes,
     })).submit(AnimalMovementController.store(props.animal), {
         preserveScroll: true,
