@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { AlertTriangle, ArrowRight, Fence, PawPrint, Plus } from '@lucide/vue';
 import { computed } from 'vue';
 import EmptyState from '@/components/farm/EmptyState.vue';
@@ -42,6 +42,8 @@ defineOptions({
         breadcrumbs: [{ title: 'Dashboard', href: dashboard() }],
     },
 });
+
+const warningPercent = usePage().props.farm.capacity_warning_percent;
 
 const isEmptyFarm = computed(
     () =>
@@ -149,7 +151,7 @@ const farmUsagePercent = computed(() =>
                             {{ stats.paddocks_needing_attention }}
                         </p>
                         <p class="text-muted-foreground text-xs">
-                            paddocks at 80% capacity or more
+                            paddocks at {{ warningPercent }}% capacity or more
                         </p>
                     </CardContent>
                 </Card>

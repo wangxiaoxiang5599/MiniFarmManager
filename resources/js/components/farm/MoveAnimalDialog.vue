@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { ArrowRightLeft } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import AnimalMovementController from '@/actions/App/Http/Controllers/AnimalMovementController';
@@ -26,6 +26,7 @@ const props = defineProps<{
 }>();
 
 const open = ref(false);
+const timezone = usePage().props.farm.timezone;
 
 const form = useForm({
     to_paddock_id: '',
@@ -121,7 +122,8 @@ function submit(): void {
                     <Label for="moved_at">
                         When
                         <span class="text-muted-foreground font-normal">
-                            (optional, defaults to now)
+                            (optional, defaults to now — farm time,
+                            {{ timezone }})
                         </span>
                     </Label>
                     <Input

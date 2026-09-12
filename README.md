@@ -81,7 +81,8 @@ Run `php artisan migrate:fresh --seed` to reset it.
 - **A paddock is never over capacity.** This is enforced when moving an animal in _and_ when editing a paddock — capacity cannot be set below the current occupancy.
 - **An animal can be unplaced.** New animals may be created without a paddock (they show as "Unplaced"), and the dashboard counts them.
 - **Single farm, no users.** Authentication is not required by the brief, so the farm pages are public. The starter kit's login/registration remains installed but unused.
-- **Times are stored and displayed in UTC.** A real deployment would set `APP_TIMEZONE`.
+- **All dates and times are in the farm's timezone** (`APP_TIMEZONE`, default `UTC`). "Today" for date pickers and the timestamp on a move are interpreted in that timezone, not the browser's, so a farmer and a remote vet entering data see the same dates.
+- **Movement history is chronological.** A movement may be back-dated, but not to before the animal's most recent movement — otherwise the stored current paddock and the history would disagree.
 - **Tag numbers are unique** across the whole farm and are the primary way a farmer identifies an animal; names are optional.
 
 ---
@@ -116,7 +117,7 @@ Full reasoning is in [`docs/design.md`](docs/design.md); the short version:
 - Stocking-unit-aware capacity rather than head counts
 - Reports: CSV export, movement and health history filtered by date range
 - Accessibility and mobile pass on the forms; the app is responsive but has not been audited
-- Set `APP_TIMEZONE`, add a cache for dashboard aggregates once the herd is large enough to matter
+- Add a cache for dashboard aggregates once the herd is large enough to matter
 
 ---
 
